@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildPublicInvestorProfilePayload,
   maskPublicEmail,
+  maskPublicName,
 } from "../api/public-investor-profile.js";
 
 describe("public investor profile API projection", () => {
@@ -30,7 +31,7 @@ describe("public investor profile API projection", () => {
       slug: "ankit-kumar-singh-2597e6b8",
       is_confirmed: false,
       basic_info: {
-        name: "Ankit Kumar Singh",
+        name: "A*** Singh",
         email: "a***t@hushh.ai",
       },
       investor_profile: null,
@@ -85,6 +86,7 @@ describe("public investor profile API projection", () => {
     );
 
     expect(payload.is_confirmed).toBe(true);
+    expect(payload.basic_info.name).toBe("N*** Meena");
     expect(payload.basic_info.email).toBe("n***h@hushh.ai");
     expect(payload.investor_profile).toEqual({
       primary_goal: {
@@ -106,5 +108,12 @@ describe("public investor profile API projection", () => {
   it("masks short usernames safely", () => {
     expect(maskPublicEmail("ab@example.com")).toBe("a***@example.com");
     expect(maskPublicEmail("abcdef@example.com")).toBe("a***f@example.com");
+  });
+
+  it("masks public names safely", () => {
+    expect(maskPublicName("John Alexander Doe")).toBe("J*** Doe");
+    expect(maskPublicName("Prince")).toBe("P***e");
+    expect(maskPublicName("Al")).toBe("A***");
+    expect(maskPublicName("  ")).toBe("Public Investor");
   });
 });

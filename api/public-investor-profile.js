@@ -64,6 +64,27 @@ export const maskPublicEmail = (email) => {
   return `${username.slice(0, 1)}***${username.slice(-1)}@${domain}`;
 };
 
+export const maskPublicName = (name) => {
+  if (!name || typeof name !== "string") {
+    return "Public Investor";
+  }
+
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length === 0) {
+    return "Public Investor";
+  }
+
+  if (parts.length === 1) {
+    const [singleName] = parts;
+    return singleName.length <= 2
+      ? `${singleName.slice(0, 1) || "*"}***`
+      : `${singleName.slice(0, 1)}***${singleName.slice(-1)}`;
+  }
+
+  return `${parts[0].slice(0, 1) || "*"}*** ${parts[parts.length - 1]}`;
+};
+
 export const buildPublicInvestorProfilePayload = (
   profileRow,
   onboardingRow = null
@@ -128,7 +149,7 @@ export const buildPublicInvestorProfilePayload = (
     is_confirmed: isConfirmed,
     basic_info: {
       name: isPublicProfileFieldVisible(privacySettings, "basic_info", "name")
-        ? profileRow.name?.trim() || "Public Investor"
+        ? maskPublicName(profileRow.name)
         : "Public Investor",
       email: isPublicProfileFieldVisible(privacySettings, "basic_info", "email")
         ? maskPublicEmail(profileRow.email)

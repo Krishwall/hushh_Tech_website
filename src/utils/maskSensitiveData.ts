@@ -30,6 +30,30 @@ export function maskPhone(phoneNumber: string, countryCode: string): string {
   return `${countryCode}-***-${lastFour}`;
 }
 
+export function maskName(name: string): string {
+  if (!name || typeof name !== 'string') return 'Anonymous';
+
+  const parts = name
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if (parts.length === 0) {
+    return 'Anonymous';
+  }
+
+  if (parts.length === 1) {
+    const [singleName] = parts;
+    return singleName.length <= 2
+      ? `${singleName[0] || '*'}***`
+      : `${singleName[0]}***${singleName.slice(-1)}`;
+  }
+
+  const [firstName] = parts;
+  const lastName = parts[parts.length - 1];
+  return `${firstName[0] || '*'}*** ${lastName}`;
+}
+
 export interface MaskedProfileData {
   name: string;
   email: string;
@@ -41,7 +65,7 @@ export interface MaskedProfileData {
 
 export function maskProfileData(profileData: any): MaskedProfileData {
   return {
-    name: profileData.name,
+    name: maskName(profileData.name),
     email: maskEmail(profileData.email),
     age: profileData.age,
     phone: maskPhone(profileData.phone_number, profileData.phone_country_code),
