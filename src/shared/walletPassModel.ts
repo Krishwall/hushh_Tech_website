@@ -232,7 +232,9 @@ export const buildWalletCardContentFromPayload = (
     membershipId: getWalletPayloadFieldValue(
       payload?.auxiliaryFields,
       "memberId",
-      passUrl
+      passUrl === DEFAULT_WALLET_ROOT_URL
+        ? "hushh-investor"
+        : passUrl.split("/").pop() || "hushh-investor"
     ),
     email: getWalletPayloadFieldValue(payload?.auxiliaryFields, "email", "\u2014"),
     profileUrl: passUrl !== DEFAULT_WALLET_ROOT_URL ? passUrl : null,
