@@ -102,9 +102,8 @@ const buildPublicProfileUrl = (input?: WalletPassModelInput) =>
 const buildMembershipId = (input?: WalletPassModelInput) =>
   getTrimmedString(input?.slug) ||
   getTrimmedString(input?.userId) ||
-  (getTrimmedString(input?.email)
-    ? getTrimmedString(input?.email).split("@")[0]
-    : "hushh-investor");
+  getTrimmedString(input?.email).split("@")[0] ||
+  "hushh-investor";
 
 export const buildWalletCardContent = (
   input: WalletPassModelInput = {}
