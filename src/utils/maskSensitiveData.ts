@@ -51,7 +51,7 @@ export function maskName(name: string): string {
 
   const [firstName] = parts;
   const lastName = parts[parts.length - 1];
-  return `${firstName[0] || '*'}*** ${lastName}`;
+  return `${firstName[0]}*** ${lastName[0]}.`;
 }
 
 export interface MaskedProfileData {
